@@ -1,8 +1,10 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Button, Text } from '@tarojs/components'
 import { observer, inject } from '@tarojs/mobx'
+import PropTypes from 'prop-types'
 
 import './index.scss'
+import Clock from '../../components/Clock'
 
 
 @inject('counterStore')
@@ -13,7 +15,14 @@ class Index extends Component {
     navigationBarTitleText: '首页'
   }
 
-  componentWillMount () { }
+  // 页面预加载
+  componentWillPreload (params) {
+    return
+  }
+  componentWillMount () {
+    // 获取传参
+    console.log(this.$router.params)
+  }
 
   componentWillReact () {
     console.log('componentWillReact')
@@ -27,19 +36,23 @@ class Index extends Component {
 
   componentDidHide () { }
 
-  increment = () => {
+  increment = (e) => {
     const { counterStore } = this.props
     counterStore.increment()
+    // 阻止事件冒泡
+    e.stopPropagation()
   }
 
-  decrement = () => {
+  decrement = (param, e) => {
+    console.log('param', param);
     const { counterStore } = this.props
     counterStore.decrement()
   }
 
-  incrementAsync = () => {
+  incrementAsync = async () => {
     const { counterStore } = this.props
-    counterStore.incrementAsync()
+    let result = await counterStore.incrementAsync()
+    console.log('result', result)
   }
 
   render () {
@@ -47,12 +60,17 @@ class Index extends Component {
     return (
       <View className='index'>
         <Button onClick={this.increment}>+</Button>
-        <Button onClick={this.decrement}>-</Button>
+        <Button onClick={this.decrement.bind(this, 'TTT')}>-</Button>
         <Button onClick={this.incrementAsync}>Add Async</Button>
         <Text>{counter}</Text>
+        <Clock/>
       </View>
     )
   }
 }
 
-export default Index 
+Index.PropTypes = {
+  counter: PropTypes.number
+}
+
+export default Index

@@ -11,10 +11,13 @@ const counterStore = observable({
   decrement() {
     this.counter--
   },
-  incrementAsync() {
+  async incrementAsync() {
     setTimeout(() => {
       this.counter++
     }, 1000)
+
+    let result = await 10
+    return result
   }
 })
 export default counterStore

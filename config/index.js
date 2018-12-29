@@ -23,6 +23,7 @@ const config = {
     }
   },
   defineConstants: {
+    APP_NAME: 'TARO START'
   },
   copy: {
     patterns: [
